@@ -1,0 +1,117 @@
+import java.util.ArrayList;
+import java.util.Scanner;
+
+// Transaction class to hold income and expense details
+class Transaction {
+    private String type; // Income or Expense
+    private double amount;
+    private String description;
+
+    public Transaction(String type, double amount, String description) {
+        this.type = type;
+        this.amount = amount;
+        this.description = description;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public double getAmount() {
+        return amount;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+}
+
+// FinanceManager class to manage financial transactions
+class FinanceManager {
+    private ArrayList<Transaction> transactions = new ArrayList<>();
+    private double balance;
+
+    public FinanceManager() {
+        this.balance = 0.0;
+    }
+
+    // Add a transaction
+    public void addTransaction(String type, double amount, String description) {
+        if (type.equalsIgnoreCase("Income")) {
+            balance += amount;
+        } else if (type.equalsIgnoreCase("Expense")) {
+            balance -= amount;
+        }
+        transactions.add(new Transaction(type, amount, description));
+    }
+
+    // Generate a report of all transactions
+    public void generateReport() {
+        System.out.println("\n--- Transaction Report ---");
+        for (Transaction transaction : transactions) {
+            System.out.println(transaction.getType() + ": " + transaction.getAmount() + " - " + transaction.getDescription());
+        }
+        System.out.println("\nCurrent Balance: " + balance);
+    }
+
+    // Get the current balance
+    public double getBalance() {
+        return balance;
+    }
+}
+
+public class MoneyMattersApp {
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        FinanceManager financeManager = new FinanceManager();
+
+        while (true) {
+            System.out.println("\n----- Money Matters: Personal Finance App -----");
+            System.out.println("1. Add Income");
+            System.out.println("2. Add Expense");
+            System.out.println("3. Generate Report");
+            System.out.println("4. Exit");
+            System.out.print("Choose an option: ");
+            int choice = scanner.nextInt();
+            scanner.nextLine(); // Consume newline left-over
+
+            switch (choice) {
+                case 1:
+                    // Add income
+                    System.out.print("Enter Income Amount: ");
+                    double incomeAmount = scanner.nextDouble();
+                    scanner.nextLine(); // Consume newline left-over
+                    System.out.print("Enter Income Description: ");
+                    String incomeDesc = scanner.nextLine();
+                    financeManager.addTransaction("Income", incomeAmount, incomeDesc);
+                    break;
+
+                case 2:
+                    // Add expense
+                    System.out.print("Enter Expense Amount: ");
+                    double expenseAmount = scanner.nextDouble();
+                    scanner.nextLine(); // Consume newline left-over
+                    System.out.print("Enter Expense Description: ");
+                    String expenseDesc = scanner.nextLine();
+                    financeManager.addTransaction("Expense", expenseAmount, expenseDesc);
+                    break;
+
+                case 3:
+                    // Generate report
+                    financeManager.generateReport();
+                    break;
+
+                case 4:
+                    // Exit the app
+                    System.out.println("Exiting the app...");
+                    scanner.close();
+                    System.exit(0);
+                    break;
+
+                default:
+                    System.out.println("Invalid option! Please try again.");
+            }
+        }
+    }
+}
